@@ -9,11 +9,23 @@ const Header = () => {
       {/* Logo */}
       <div className="inline-flex items-center justify-center gap-3 mb-6">
         <div className="relative">
-          <div className="w-12 h-12 rounded-full bg-gradient-sunrise flex items-center justify-center shadow-glow animate-pulse-glow">
-            <Sparkles className="w-6 h-6 text-primary-foreground" />
+          {/* Outer rotating ring */}
+          <div className="absolute -inset-3 rounded-full border border-amber-300/30 animate-spin" style={{ animationDuration: '8s' }} />
+          <div className="absolute -inset-5 rounded-full border border-amber-200/20 animate-spin" style={{ animationDuration: '12s', animationDirection: 'reverse' }} />
+          
+          {/* Pulsing glow layers */}
+          <div className="absolute -inset-4 rounded-full bg-gradient-sunrise opacity-20 blur-2xl animate-pulse" />
+          <div className="absolute -inset-2 rounded-full bg-gradient-glow opacity-40 blur-xl animate-pulse-glow" />
+          
+          {/* Main icon container */}
+          <div className="relative w-12 h-12 rounded-full bg-gradient-sunrise flex items-center justify-center shadow-glow animate-pulse-glow">
+            <Sparkles className="w-6 h-6 text-primary-foreground animate-float" />
           </div>
-          {/* Glow effect */}
-          <div className="absolute inset-0 w-12 h-12 rounded-full bg-gradient-sunrise opacity-30 blur-xl" />
+          
+          {/* Floating sparkle particles */}
+          <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-300 opacity-60 animate-float" style={{ animationDelay: '0.5s' }} />
+          <div className="absolute -bottom-1 -left-1 w-1.5 h-1.5 rounded-full bg-amber-400 opacity-50 animate-float" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-0 -left-2 w-1 h-1 rounded-full bg-amber-200 opacity-70 animate-float" style={{ animationDelay: '1.5s' }} />
         </div>
         <h1 className="text-4xl md:text-5xl font-display font-semibold text-foreground tracking-tight">
           Glimmer
