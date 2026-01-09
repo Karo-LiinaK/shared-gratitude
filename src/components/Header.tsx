@@ -1,14 +1,11 @@
 import { Sparkles } from "lucide-react";
-
 const Header = () => {
-  const today = new Date().toLocaleDateString('fi-FI', { 
-    weekday: 'long', 
-    month: 'long', 
-    day: 'numeric' 
+  const today = new Date().toLocaleDateString('fi-FI', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric'
   });
-
-  return (
-    <header className="text-center py-12">
+  return <header className="text-center py-12">
       {/* Logo */}
       <div className="inline-flex items-center justify-center gap-3 mb-6">
         <div className="relative">
@@ -24,7 +21,7 @@ const Header = () => {
       </div>
       
       {/* Date */}
-      <p className="text-muted-foreground font-body text-lg">
+      <p className="text-muted-foreground text-lg font-serif">
         {today}
       </p>
       
@@ -32,8 +29,6 @@ const Header = () => {
       <p className="text-glimmer-warm-gray font-body text-sm mt-2 max-w-md mx-auto">
         Tallenna arjen valoisat hetket
       </p>
-    </header>
-  );
+    </header>;
 };
-
 export default Header;
