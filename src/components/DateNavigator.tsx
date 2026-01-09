@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { fi } from "date-fns/locale";
 import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -57,7 +58,7 @@ const DateNavigator = ({ selectedDate, onDateChange, hasGratitudes }: DateNaviga
             )}
           >
             <CalendarIcon className="h-4 w-4 text-primary" />
-            {isToday ? "Today" : format(selectedDate, "EEEE, MMM d")}
+            {isToday ? "Tänään" : format(selectedDate, "EEEE d.M.", { locale: fi })}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="center">
@@ -100,7 +101,7 @@ const DateNavigator = ({ selectedDate, onDateChange, hasGratitudes }: DateNaviga
           onClick={goToToday}
           className="ml-2 text-xs font-body"
         >
-          Back to Today
+          Takaisin tähän päivään
         </Button>
       )}
     </div>
