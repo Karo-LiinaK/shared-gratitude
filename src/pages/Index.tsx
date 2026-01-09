@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { format } from "date-fns";
+import { fi } from "date-fns/locale";
 import { toast } from "sonner";
 import Header from "@/components/Header";
 import GratitudeInput from "@/components/GratitudeInput";
@@ -18,24 +19,24 @@ interface Gratitude {
 const generateSampleData = (): Gratitude[] => {
   const now = new Date();
   const samples = [
-    // Today
-    { text: "Morning coffee with the sunrise streaming through the window", daysAgo: 0, hoursAgo: 1 },
-    { text: "A warm hug from my daughter before school", daysAgo: 0, hoursAgo: 2 },
-    // Yesterday
-    { text: "The sound of rain on the roof while reading", daysAgo: 1, hoursAgo: 3 },
-    { text: "A surprise call from an old friend", daysAgo: 1, hoursAgo: 8 },
-    { text: "Homemade soup for dinner", daysAgo: 1, hoursAgo: 12 },
-    // 2 days ago
-    { text: "Finding a forgotten $20 in my jacket pocket", daysAgo: 2, hoursAgo: 5 },
-    { text: "The first flowers blooming in the garden", daysAgo: 2, hoursAgo: 10 },
-    // 3 days ago
-    { text: "A productive morning at work", daysAgo: 3, hoursAgo: 4 },
-    { text: "My dog's excitement when I came home", daysAgo: 3, hoursAgo: 9 },
-    // 5 days ago
-    { text: "A beautiful sunset walk", daysAgo: 5, hoursAgo: 6 },
-    // 7 days ago
-    { text: "Finishing a book I've been reading for months", daysAgo: 7, hoursAgo: 2 },
-    { text: "A quiet moment of reflection", daysAgo: 7, hoursAgo: 8 },
+    // Tänään
+    { text: "Aamukahvi auringonnousun valossa ikkunan äärellä", daysAgo: 0, hoursAgo: 1 },
+    { text: "Lämmin halaus tyttäreltäni ennen koulua", daysAgo: 0, hoursAgo: 2 },
+    // Eilen
+    { text: "Sateen ääni katolla kirjaa lukiessa", daysAgo: 1, hoursAgo: 3 },
+    { text: "Yllätyssoitto vanhalta ystävältä", daysAgo: 1, hoursAgo: 8 },
+    { text: "Kotitekoinen keitto illalliseksi", daysAgo: 1, hoursAgo: 12 },
+    // 2 päivää sitten
+    { text: "Löysin unohtuneen 20 euron setelin takintaskusta", daysAgo: 2, hoursAgo: 5 },
+    { text: "Ensimmäiset kukat puhkesivat puutarhassa", daysAgo: 2, hoursAgo: 10 },
+    // 3 päivää sitten
+    { text: "Tuottelias aamu töissä", daysAgo: 3, hoursAgo: 4 },
+    { text: "Koirani innostus kun tulin kotiin", daysAgo: 3, hoursAgo: 9 },
+    // 5 päivää sitten
+    { text: "Kaunis auringonlaskukävely", daysAgo: 5, hoursAgo: 6 },
+    // 7 päivää sitten
+    { text: "Sain vihdoin luettua kirjan jota luin kuukausia", daysAgo: 7, hoursAgo: 2 },
+    { text: "Hiljainen hetki itsekseni", daysAgo: 7, hoursAgo: 8 },
   ];
 
   return samples.map((sample, index) => {
@@ -57,9 +58,9 @@ const Index = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const [familyMembers] = useState([
-    { id: "1", name: "You", initials: "ME", color: "amber" },
-    { id: "2", name: "Sarah", initials: "SA", color: "peach" },
-    { id: "3", name: "Tom", initials: "TM", color: "coral" },
+    { id: "1", name: "Sinä", initials: "MÄ", color: "amber" },
+    { id: "2", name: "Saara", initials: "SA", color: "peach" },
+    { id: "3", name: "Tomi", initials: "TO", color: "coral" },
   ]);
 
   const isToday = format(selectedDate, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd");
@@ -82,19 +83,19 @@ const Index = () => {
     const newGratitude: Gratitude = {
       id: Date.now().toString(),
       text,
-      author: "You",
+      author: "Sinä",
       timestamp: new Date(),
     };
     
     setGratitudes((prev) => [newGratitude, ...prev]);
-    toast.success("Gratitude added ✨", {
-      description: "Your moment has been captured",
+    toast.success("Kiitollisuus lisätty ✨", {
+      description: "Hetkesi on tallennettu",
     });
   };
 
   const handleInvite = () => {
-    toast.info("Invite feature coming soon!", {
-      description: "Share your gratitude space with family",
+    toast.info("Kutsutoiminto tulossa pian!", {
+      description: "Jaa kiitollisuustilasi perheen kanssa",
     });
   };
 
@@ -146,15 +147,15 @@ const Index = () => {
             <div className="text-center py-16 bg-card/50 rounded-2xl">
               <p className="text-muted-foreground font-body">
                 {isToday 
-                  ? "Start capturing what makes you grateful today"
-                  : `No gratitudes recorded on ${format(selectedDate, "MMMM d, yyyy")}`
+                  ? "Aloita tallentamalla mistä olet kiitollinen tänään"
+                  : `Ei kiitollisuuksia päivänä ${format(selectedDate, "d. MMMM yyyy", { locale: fi })}`
                 }
               </p>
             </div>
           ) : (
             <>
               <h2 className="text-lg font-display font-semibold text-foreground mb-4">
-                {isToday ? "Today's Glimmers" : format(selectedDate, "MMMM d, yyyy")}
+                {isToday ? "Tämän päivän valohippuset" : format(selectedDate, "d. MMMM yyyy", { locale: fi })}
               </h2>
               {filteredGratitudes.map((gratitude, index) => (
                 <GratitudeCard
@@ -173,11 +174,11 @@ const Index = () => {
         <div className="mt-12 text-center space-y-1">
           <p className="text-sm text-muted-foreground font-body">
             <span className="text-primary font-semibold">{filteredGratitudes.length}</span> 
-            {" "}glimmer{filteredGratitudes.length !== 1 ? "s" : ""} 
-            {isToday ? " today" : ` on ${format(selectedDate, "MMM d")}`}
+            {" "}valohippus{filteredGratitudes.length !== 1 ? "ta" : ""} 
+            {isToday ? " tänään" : ` päivänä ${format(selectedDate, "d.M.", { locale: fi })}`}
           </p>
           <p className="text-xs text-muted-foreground/70 font-body">
-            {totalGratitudes} total moments across {daysWithGratitudes} days
+            Yhteensä {totalGratitudes} hetkeä {daysWithGratitudes} päivän ajalta
           </p>
         </div>
       </div>

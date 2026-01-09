@@ -33,7 +33,7 @@ const FamilyCircle = ({ members, maxMembers = 6, onInvite }: FamilyCircleProps) 
     <div className="flex flex-col items-center gap-4">
       <div className="flex items-center gap-2 text-muted-foreground">
         <Users className="w-4 h-4" />
-        <span className="text-sm font-body">Your Circle</span>
+        <span className="text-sm font-body">Sinun piirisi</span>
       </div>
       
       <div className="flex items-center -space-x-3">
@@ -66,7 +66,7 @@ const FamilyCircle = ({ members, maxMembers = 6, onInvite }: FamilyCircleProps) 
               </button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Invite someone ({spotsLeft} spots left)</p>
+              <p>Kutsu joku ({spotsLeft} paikkaa jäljellä)</p>
             </TooltipContent>
           </Tooltip>
         )}

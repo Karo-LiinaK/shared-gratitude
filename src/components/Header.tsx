@@ -1,7 +1,7 @@
 import { Sparkles } from "lucide-react";
 
 const Header = () => {
-  const today = new Date().toLocaleDateString('en-US', { 
+  const today = new Date().toLocaleDateString('fi-FI', { 
     weekday: 'long', 
     month: 'long', 
     day: 'numeric' 
@@ -30,7 +30,7 @@ const Header = () => {
       
       {/* Subtitle */}
       <p className="text-glimmer-warm-gray font-body text-sm mt-2 max-w-md mx-auto">
-        Capture the light in your everyday moments
+        Tallenna arjen valoisat hetket
       </p>
     </header>
   );

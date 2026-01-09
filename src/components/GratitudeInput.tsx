@@ -42,7 +42,7 @@ const GratitudeInput = ({ onSubmit }: GratitudeInputProps) => {
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           onKeyDown={handleKeyDown}
-          placeholder="What are you grateful for today?"
+          placeholder="Mistä olet kiitollinen tänään?"
           className="flex-1 min-h-[60px] border-0 bg-transparent resize-none focus-visible:ring-0 text-foreground placeholder:text-muted-foreground font-body text-base"
         />
         
