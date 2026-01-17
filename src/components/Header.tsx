@@ -8,7 +8,7 @@ const Header = () => {
   return <header className="text-center py-12">
       {/* Logo */}
       <div className="inline-flex items-center justify-center gap-3 mb-6">
-        <div className="relative">
+        <div className="relative text-[#a18282]">
           {/* Outer rotating ring */}
           <div className="absolute -inset-3 rounded-full border border-amber-300/30 animate-spin" style={{
           animationDuration: '8s'
@@ -23,7 +23,7 @@ const Header = () => {
           <div className="absolute -inset-2 rounded-full bg-gradient-glow opacity-40 blur-xl animate-pulse-glow" />
           
           {/* Main icon container */}
-          <div className="relative w-12 h-12 rounded-full bg-gradient-sunrise flex items-center justify-center shadow-glow animate-pulse-glow opacity-60">
+          <div className="relative w-12 h-12 rounded-full bg-gradient-sunrise flex items-center justify-center shadow-glow animate-pulse-glow opacity-60 text-accent">
             <Sun className="h-6 text-primary-foreground animate-float w-[33px]" />
           </div>
           
