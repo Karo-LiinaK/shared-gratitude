@@ -285,4 +285,61 @@
   .animate-twinkle {
     animation: twinkle 3s ease-in-out infinite;
   }
+
+  /* Glitter gold text effect */
+  @keyframes glitter-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes glitter-sparkle {
+    0%, 100% {
+      text-shadow:
+        0 0 4px rgba(255, 215, 0, 0.4),
+        0 0 8px rgba(255, 193, 37, 0.2);
+    }
+    25% {
+      text-shadow:
+        0 0 8px rgba(255, 215, 0, 0.7),
+        0 0 16px rgba(255, 193, 37, 0.4),
+        0 0 24px rgba(218, 165, 32, 0.2);
+    }
+    50% {
+      text-shadow:
+        0 0 4px rgba(255, 215, 0, 0.3),
+        0 0 10px rgba(255, 193, 37, 0.15);
+    }
+    75% {
+      text-shadow:
+        0 0 10px rgba(255, 215, 0, 0.8),
+        0 0 20px rgba(255, 193, 37, 0.5),
+        0 0 30px rgba(218, 165, 32, 0.3);
+    }
+  }
+
+  .glitter-gold {
+    background: linear-gradient(
+      90deg,
+      #DAA520 0%,
+      #FFD700 15%,
+      #FFC125 30%,
+      #DAA520 45%,
+      #FFD700 55%,
+      #B8860B 70%,
+      #FFD700 85%,
+      #DAA520 100%
+    );
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glitter-shift 4s ease-in-out infinite, glitter-sparkle 2.5s ease-in-out infinite;
+  }
 }
