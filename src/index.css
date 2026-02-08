@@ -261,4 +261,28 @@
   .animate-fade-in-up {
     animation: fade-in-up 0.5s ease-out forwards;
   }
+
+  /* Twinkling star animation */
+  @keyframes twinkle {
+    0%, 100% {
+      opacity: 0;
+      transform: scale(0.5) translateY(0);
+    }
+    20% {
+      opacity: 1;
+      transform: scale(1) translateY(-4px);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(0.8) translateY(-8px);
+    }
+    80% {
+      opacity: 1;
+      transform: scale(1.1) translateY(-3px);
+    }
+  }
+
+  .animate-twinkle {
+    animation: twinkle 3s ease-in-out infinite;
+  }
 }
