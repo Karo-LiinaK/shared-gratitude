@@ -8,33 +8,33 @@ const Header = () => {
   return <header className="text-center py-12">
       {/* Logo */}
       <div className="inline-flex items-center justify-center gap-3 mb-6">
-        <div className="relative text-[#a18282]">
-          {/* Outer rotating ring */}
-          <div className="absolute -inset-3 rounded-full border border-amber-300/30 animate-spin" style={{
+        <div className="relative">
+          {/* Outer rotating rings */}
+          <div className="absolute -inset-4 rounded-full border-2 border-[#E2F7AA]/50 animate-spin" style={{
           animationDuration: '8s'
         }} />
-          <div className="absolute -inset-5 rounded-full border border-amber-200/20 animate-spin" style={{
+          <div className="absolute -inset-6 rounded-full border border-[#E2F7AA]/30 animate-spin" style={{
           animationDuration: '12s',
           animationDirection: 'reverse'
         }} />
           
           {/* Pulsing glow layers */}
-          <div className="absolute -inset-4 rounded-full bg-gradient-sunrise opacity-20 blur-2xl animate-pulse" />
-          <div className="absolute -inset-2 rounded-full bg-gradient-glow opacity-40 blur-xl animate-pulse-glow" />
+          <div className="absolute -inset-5 rounded-full bg-[#E2F7AA]/30 blur-2xl animate-pulse" />
+          <div className="absolute -inset-3 rounded-full bg-[#E2F7AA]/50 blur-xl animate-pulse-glow" />
           
           {/* Main icon container */}
-          <div className="relative w-12 h-12 rounded-full bg-gradient-sunrise flex items-center justify-center shadow-glow animate-pulse-glow opacity-60 text-accent">
-            <Sun className="h-6 text-primary-foreground animate-float w-[33px] border-0" />
+          <div className="relative w-14 h-14 rounded-full bg-[#E2F7AA] flex items-center justify-center shadow-glow animate-pulse-glow">
+            <Sun className="h-7 w-7 text-foreground animate-float" />
           </div>
           
           {/* Floating sparkle particles */}
-          <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-300 opacity-60 animate-float" style={{
+          <div className="absolute -top-2 -right-2 w-2.5 h-2.5 rounded-full bg-[#E2F7AA] opacity-80 animate-float" style={{
           animationDelay: '0.5s'
         }} />
-          <div className="absolute -bottom-1 -left-1 w-1.5 h-1.5 rounded-full bg-amber-400 opacity-50 animate-float" style={{
+          <div className="absolute -bottom-1 -left-2 w-2 h-2 rounded-full bg-[#E2F7AA] opacity-70 animate-float" style={{
           animationDelay: '1s'
         }} />
-          <div className="absolute top-0 -left-2 w-1 h-1 rounded-full bg-amber-200 opacity-70 animate-float" style={{
+          <div className="absolute top-1 -left-3 w-1.5 h-1.5 rounded-full bg-[#E2F7AA] opacity-90 animate-float" style={{
           animationDelay: '1.5s'
         }} />
         </div>
