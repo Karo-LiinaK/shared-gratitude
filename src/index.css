@@ -390,4 +390,28 @@
     -webkit-text-fill-color: transparent;
     animation: glitter-shift 4s ease-in-out infinite, glitter-sparkle 2.5s ease-in-out infinite;
   }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-float,
+    .animate-pulse,
+    .animate-pulse-glow,
+    .animate-twinkle,
+    .animate-fade-in-up,
+    .glimmer-shimmer,
+    .bg-wavy-gradient,
+    .glitter-gold {
+      animation: none !important;
+    }
+
+    .animate-fade-in-up {
+      opacity: 1 !important;
+    }
+
+    .ribbon-letter {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
 }
