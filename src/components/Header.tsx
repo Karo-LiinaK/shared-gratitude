@@ -24,7 +24,7 @@ const Header = () => {
           
           {/* Main icon container */}
           <div className="relative w-14 h-14 rounded-full bg-[#E2F7AA] flex items-center justify-center shadow-glow animate-pulse-glow">
-            <Sun className="h-7 w-7 text-foreground animate-float" />
+            <Sun className="h-7 w-7 text-[#FAD1FF] animate-float" />
           </div>
           
           {/* Floating sparkle particles */}
