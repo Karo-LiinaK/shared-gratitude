@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Libre Baskerville"', 'serif'],
+        display: ['"Playfair Display"', 'serif'],
         body: ['"Libre Baskerville"', 'serif'],
       },
       colors: {
