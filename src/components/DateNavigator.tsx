@@ -44,6 +44,7 @@ const DateNavigator = ({ selectedDate, onDateChange, hasGratitudes }: DateNaviga
         size="icon"
         onClick={goToPreviousDay}
         className="h-9 w-9 rounded-full hover:bg-secondary"
+        aria-label="Edellinen päivä"
       >
         <ChevronLeft className="h-4 w-4" />
       </Button>
@@ -90,6 +91,7 @@ const DateNavigator = ({ selectedDate, onDateChange, hasGratitudes }: DateNaviga
         onClick={goToNextDay}
         disabled={isToday}
         className="h-9 w-9 rounded-full hover:bg-secondary disabled:opacity-30"
+        aria-label="Seuraava päivä"
       >
         <ChevronRight className="h-4 w-4" />
       </Button>

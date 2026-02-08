@@ -32,7 +32,7 @@ const GratitudeInput = ({ onSubmit }: GratitudeInputProps) => {
       }`}
     >
       <div className="flex items-start gap-3 p-4">
-        <div className="mt-1">
+        <div className="mt-1" aria-hidden="true">
           <Sparkles className="w-5 h-5 text-primary animate-pulse" />
         </div>
         
@@ -50,6 +50,7 @@ const GratitudeInput = ({ onSubmit }: GratitudeInputProps) => {
           onClick={handleSubmit}
           disabled={!text.trim()}
           size="icon"
+          aria-label="Lähetä kiitollisuusmerkintä"
           className="shrink-0 w-10 h-10 rounded-full bg-gradient-sunrise text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-40 shadow-soft"
         >
           <Send className="w-4 h-4" />
@@ -58,12 +59,12 @@ const GratitudeInput = ({ onSubmit }: GratitudeInputProps) => {
 
       {/* Upcoming features */}
       <div className="flex items-center gap-3 px-4 pb-3 pt-0">
-        <button disabled className="flex items-center gap-1.5 text-xs text-muted-foreground/50 cursor-not-allowed">
-          <Camera className="w-3.5 h-3.5" />
+        <button disabled aria-label="Kuvan lisäys tulossa pian" className="flex items-center gap-1.5 text-xs text-muted-foreground/50 cursor-not-allowed">
+          <Camera className="w-3.5 h-3.5" aria-hidden="true" />
           <span className="font-body">Kuva tulossa</span>
         </button>
-        <button disabled className="flex items-center gap-1.5 text-xs text-muted-foreground/50 cursor-not-allowed">
-          <Mic className="w-3.5 h-3.5" />
+        <button disabled aria-label="Äänen lisäys tulossa pian" className="flex items-center gap-1.5 text-xs text-muted-foreground/50 cursor-not-allowed">
+          <Mic className="w-3.5 h-3.5" aria-hidden="true" />
           <span className="font-body">Ääni tulossa</span>
         </button>
       </div>

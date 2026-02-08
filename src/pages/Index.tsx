@@ -175,7 +175,7 @@ const Index = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-glimmer-peach/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 container max-w-2xl mx-auto px-4 pb-20">
+      <main className="relative z-10 container max-w-2xl mx-auto px-4 pb-20">
         <Header />
 
         {/* Family Circle */}
@@ -224,7 +224,7 @@ const Index = () => {
             Yhteensä {totalGratitudes} hetkeä {daysWithGratitudes} päivän ajalta
           </p>
         </div>
-      </div>
+      </main>
     </div>;
 };
 export default Index;

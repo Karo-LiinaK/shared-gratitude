@@ -9,7 +9,8 @@ interface GratitudeCardProps {
 
 const GratitudeCard = ({ text, author, timestamp, index }: GratitudeCardProps) => {
   return (
-    <div 
+    <article
+      role="listitem"
       className="group relative bg-gradient-card rounded-2xl p-6 shadow-card hover:shadow-glow transition-all duration-500 animate-fade-in-up"
       style={{ animationDelay: `${index * 100}ms` }}
     >
@@ -33,7 +34,7 @@ const GratitudeCard = ({ text, author, timestamp, index }: GratitudeCardProps) =
           {timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </span>
       </div>
-    </div>
+    </article>
   );
 };
 
