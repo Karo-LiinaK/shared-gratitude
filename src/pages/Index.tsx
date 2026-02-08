@@ -96,7 +96,7 @@ const Index = () => {
   const [familyMembers] = useState([{
     id: "1",
     name: "Sinä",
-    initials: "MÄ",
+    initials: "OMA",
     color: "amber"
   }, {
     id: "2",
