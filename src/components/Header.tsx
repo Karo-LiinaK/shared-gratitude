@@ -14,7 +14,7 @@ const Header = () => {
 
       {/* Title */}
       <div className="relative z-10 mb-6">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>
+        <h1 className="text-4xl md:text-5xl font-display font-bold tracking-tight text-foreground">
           Glimmer
         </h1>
       </div>

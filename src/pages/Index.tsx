@@ -194,7 +194,7 @@ const Index = () => {
           </div>}
 
         {/* Gratitudes List */}
-        <div className="space-y-4">
+        <div className="space-y-4" role="list">
           {filteredGratitudes.length === 0 ? <div className="text-center py-16 bg-card/50 rounded-2xl">
               <p className="text-muted-foreground font-body">
                 {isToday ? "Aloita tallentamalla mistä olet kiitollinen tänään" : `Ei kiitollisuuksia päivänä ${format(selectedDate, "d. MMMM yyyy", {
