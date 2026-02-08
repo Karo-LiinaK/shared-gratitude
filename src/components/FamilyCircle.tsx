@@ -20,7 +20,7 @@ interface FamilyCircleProps {
 }
 
 const colorVariants: Record<string, string> = {
-  amber: "bg-[#D4E6A0] text-[#201D5E]",
+  amber: "bg-[#B0D09F] text-[#201D5E]",
   peach: "bg-[#D6C4E8] text-[#201D5E]",
   coral: "bg-[#E8D9A8] text-[#201D5E]",
   cream: "bg-[#E2BDA4] text-[#201D5E]",
