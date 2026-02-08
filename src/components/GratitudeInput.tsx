@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Send, Sparkles } from "lucide-react";
+import { Send, Sparkles, Camera, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -54,6 +54,18 @@ const GratitudeInput = ({ onSubmit }: GratitudeInputProps) => {
         >
           <Send className="w-4 h-4" />
         </Button>
+      </div>
+
+      {/* Upcoming features */}
+      <div className="flex items-center gap-3 px-4 pb-3 pt-0">
+        <button disabled className="flex items-center gap-1.5 text-xs text-muted-foreground/50 cursor-not-allowed">
+          <Camera className="w-3.5 h-3.5" />
+          <span className="font-body">Kuva tulossa</span>
+        </button>
+        <button disabled className="flex items-center gap-1.5 text-xs text-muted-foreground/50 cursor-not-allowed">
+          <Mic className="w-3.5 h-3.5" />
+          <span className="font-body">Ääni tulossa</span>
+        </button>
       </div>
     </div>
   );
