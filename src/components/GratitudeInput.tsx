@@ -51,9 +51,9 @@ const GratitudeInput = ({ onSubmit }: GratitudeInputProps) => {
           disabled={!text.trim()}
           size="icon"
           aria-label="Lähetä kiitollisuusmerkintä"
-          className="shrink-0 w-10 h-10 rounded-full bg-gradient-sunrise text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-40 shadow-soft"
+          className="shrink-0 w-12 h-12 rounded-full bg-[#201D5E] text-white hover:bg-[#2a2678] transition-all disabled:opacity-30 shadow-soft disabled:bg-[#201D5E]/40"
         >
-          <Send className="w-4 h-4" />
+          <Send className="w-5 h-5" />
         </Button>
       </div>
 
