@@ -15,7 +15,7 @@ export default {
     extend: {
       fontFamily: {
         display: ['"Libre Baskerville"', 'serif'],
-        body: ['Inter', 'sans-serif'],
+        body: ['"Libre Baskerville"', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
