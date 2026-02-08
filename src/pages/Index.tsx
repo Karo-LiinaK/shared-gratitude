@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { format } from "date-fns";
 import { fi } from "date-fns/locale";
 import { toast } from "sonner";
@@ -90,8 +90,30 @@ const generateSampleData = (): Gratitude[] => {
     };
   });
 };
+
+const STORAGE_KEY = "glimmer-gratitudes";
+
+const loadGratitudes = (): Gratitude[] => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return parsed.map((g: any) => ({ ...g, timestamp: new Date(g.timestamp) }));
+    }
+  } catch (e) {
+    console.error("Failed to load gratitudes from localStorage", e);
+  }
+  return generateSampleData();
+};
+
 const Index = () => {
-  const [gratitudes, setGratitudes] = useState<Gratitude[]>(generateSampleData());
+  const [gratitudes, setGratitudes] = useState<Gratitude[]>(loadGratitudes);
+
+  // Persist gratitudes to localStorage
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(gratitudes));
+  }, [gratitudes]);
+
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [familyMembers] = useState([{
     id: "1",
