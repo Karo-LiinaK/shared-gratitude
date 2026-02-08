@@ -14,7 +14,7 @@ const Header = () => {
 
       {/* Title */}
       <div className="relative z-10 mb-6">
-        <h1 className="text-4xl md:text-5xl font-display font-semibold text-foreground tracking-tight">
+        <h1 className="text-4xl md:text-5xl font-display font-semibold tracking-tight glitter-gold">
           Glimmer
         </h1>
       </div>
