@@ -1,13 +1,25 @@
-import { Sparkles } from "lucide-react";
+import { Sparkles, Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface GratitudeCardProps {
   text: string;
   author?: string;
   timestamp: Date;
   index: number;
+  onDelete?: () => void;
 }
 
-const GratitudeCard = ({ text, author, timestamp, index }: GratitudeCardProps) => {
+const GratitudeCard = ({ text, author, timestamp, index, onDelete }: GratitudeCardProps) => {
   return (
     <article
       role="listitem"
@@ -17,10 +29,31 @@ const GratitudeCard = ({ text, author, timestamp, index }: GratitudeCardProps) =
       {/* Shimmer overlay */}
       <div className="absolute inset-0 rounded-2xl glimmer-shimmer pointer-events-none" />
       
-      {/* Sparkle icon */}
-      <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-sunrise rounded-full flex items-center justify-center shadow-soft opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <Sparkles className="w-4 h-4 text-primary-foreground" />
-      </div>
+      {/* Delete button */}
+      {onDelete && (
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <button
+              className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground/40 hover:text-destructive hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-all duration-300"
+              aria-label="Poista merkintä"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Poista merkintä?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Haluatko varmasti poistaa tämän kiitollisuusmerkinnän? Tätä ei voi perua.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Peruuta</AlertDialogCancel>
+              <AlertDialogAction onClick={onDelete}>Poista</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
       
       <p className="text-lg font-body text-foreground leading-relaxed mb-4">
         {text}

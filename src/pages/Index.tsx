@@ -156,6 +156,13 @@ const Index = () => {
       description: "Hetkesi on tallennettu"
     });
   };
+  const handleDeleteGratitude = (id: string) => {
+    setGratitudes(prev => prev.filter(g => g.id !== id));
+    toast.success("Merkintä poistettu", {
+      description: "Kiitollisuusmerkintä on poistettu"
+    });
+  };
+
   const handleInvite = () => {
     toast.info("Kutsutoiminto tulossa pian!", {
       description: "Jaa kiitollisuustilasi perheen kanssa"
@@ -207,7 +214,7 @@ const Index = () => {
               locale: fi
             })}
               </h2>
-              {filteredGratitudes.map((gratitude, index) => <GratitudeCard key={gratitude.id} text={gratitude.text} author={gratitude.author} timestamp={gratitude.timestamp} index={index} />)}
+              {filteredGratitudes.map((gratitude, index) => <GratitudeCard key={gratitude.id} text={gratitude.text} author={gratitude.author} timestamp={gratitude.timestamp} index={index} onDelete={() => handleDeleteGratitude(gratitude.id)} />)}
             </>}
         </div>
 
