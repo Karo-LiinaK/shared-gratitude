@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { format } from "date-fns";
 import { fi } from "date-fns/locale";
 import { toast } from "sonner";
+import { z } from "zod";
 import Header from "@/components/Header";
 import GratitudeInput from "@/components/GratitudeInput";
 import GratitudeCard from "@/components/GratitudeCard";
@@ -93,15 +94,31 @@ const generateSampleData = (): Gratitude[] => {
 
 const STORAGE_KEY = "glimmer-gratitudes";
 
+const GratitudeSchema = z.object({
+  id: z.string(),
+  text: z.string(),
+  author: z.string().optional(),
+  timestamp: z.string().or(z.number()),
+});
+
+const GratitudesArraySchema = z.array(GratitudeSchema);
+
 const loadGratitudes = (): Gratitude[] => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
-      return parsed.map((g: any) => ({ ...g, timestamp: new Date(g.timestamp) }));
+      const validated = GratitudesArraySchema.parse(parsed);
+      return validated.map((g): Gratitude => ({
+        id: g.id,
+        text: g.text,
+        author: g.author,
+        timestamp: new Date(g.timestamp),
+      }));
     }
   } catch (e) {
     console.error("Failed to load gratitudes from localStorage", e);
+    localStorage.removeItem(STORAGE_KEY);
   }
   return generateSampleData();
 };
