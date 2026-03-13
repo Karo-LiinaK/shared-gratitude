@@ -290,12 +290,25 @@ const Index = () => {
         </div>
 
         {/* Input Section - Only show for today */}
-        {isToday && <div className="mb-10">
+        {isToday && <div className="mb-10" ref={inputRef}>
             <GratitudeInput onSubmit={handleAddGratitude} />
           </div>}
 
+        {/* Flying gratitude element */}
+        {pendingGratitude && (
+          <div
+            ref={flyingRef}
+            className="bg-gradient-card rounded-2xl p-6 shadow-card pointer-events-none"
+            style={{ opacity: 0 }}
+          >
+            <p className="text-lg font-body text-foreground leading-relaxed">
+              {pendingGratitude}
+            </p>
+          </div>
+        )}
+
         {/* Gratitudes List */}
-        <div className="space-y-4" role="list">
+        <div className="space-y-4" role="list" ref={listRef}>
           {filteredGratitudes.length === 0 ? <div className="text-center py-16 bg-card/50 rounded-2xl">
               <p className="text-muted-foreground font-body">
                 {isToday ? "Aloita tallentamalla mistä olet kiitollinen tänään" : `Ei kiitollisuuksia päivänä ${format(selectedDate, "d. MMMM yyyy", {
