@@ -266,7 +266,7 @@ const Index = () => {
   // Calculate total stats
   const totalGratitudes = gratitudes.length;
   const daysWithGratitudes = new Set(gratitudes.map(g => format(g.timestamp, "yyyy-MM-dd"))).size;
-  return <div className="min-h-screen bg-wavy-gradient">
+  return <div className="min-h-screen bg-background">
       {/* Decorative background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-glimmer-peach/10 rounded-full blur-3xl animate-float" />
