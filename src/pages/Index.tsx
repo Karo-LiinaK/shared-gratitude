@@ -1,8 +1,9 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { format } from "date-fns";
 import { fi } from "date-fns/locale";
 import { toast } from "sonner";
 import { z } from "zod";
+import gsap from "gsap";
 import Header from "@/components/Header";
 import GratitudeInput from "@/components/GratitudeInput";
 import GratitudeCard from "@/components/GratitudeCard";
