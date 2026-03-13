@@ -1,8 +1,9 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { format } from "date-fns";
 import { fi } from "date-fns/locale";
 import { toast } from "sonner";
 import { z } from "zod";
+import gsap from "gsap";
 import Header from "@/components/Header";
 import GratitudeInput from "@/components/GratitudeInput";
 import GratitudeCard from "@/components/GratitudeCard";
@@ -125,6 +126,7 @@ const loadGratitudes = (): Gratitude[] => {
 
 const Index = () => {
   const [gratitudes, setGratitudes] = useState<Gratitude[]>(loadGratitudes);
+  const [pendingGratitude, setPendingGratitude] = useState<string | null>(null);
 
   // Persist gratitudes to localStorage
   useEffect(() => {
@@ -150,6 +152,11 @@ const Index = () => {
   }]);
   const isToday = format(selectedDate, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd");
 
+  // Refs for GSAP animation
+  const inputRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  const flyingRef = useRef<HTMLDivElement>(null);
+
   // Filter gratitudes for selected date
   const filteredGratitudes = useMemo(() => {
     const selectedDateStr = format(selectedDate, "yyyy-MM-dd");
@@ -161,7 +168,8 @@ const Index = () => {
     const dateStr = format(date, "yyyy-MM-dd");
     return gratitudes.some(g => format(g.timestamp, "yyyy-MM-dd") === dateStr);
   };
-  const handleAddGratitude = (text: string) => {
+
+  const commitGratitude = useCallback((text: string) => {
     const newGratitude: Gratitude = {
       id: Date.now().toString(),
       text,
@@ -172,7 +180,76 @@ const Index = () => {
     toast.success("Kiitollisuus lisätty ✨", {
       description: "Hetkesi on tallennettu"
     });
-  };
+  }, []);
+
+  const handleAddGratitude = useCallback((text: string) => {
+    if (!inputRef.current || !listRef.current) {
+      commitGratitude(text);
+      return;
+    }
+
+    // Create flying element
+    setPendingGratitude(text);
+
+    // Wait for the flying element to render
+    requestAnimationFrame(() => {
+      const flyEl = flyingRef.current;
+      const inputEl = inputRef.current;
+      const listEl = listRef.current;
+      if (!flyEl || !inputEl || !listEl) {
+        commitGratitude(text);
+        setPendingGratitude(null);
+        return;
+      }
+
+      const inputRect = inputEl.getBoundingClientRect();
+      const listRect = listEl.getBoundingClientRect();
+
+      // Position the flying element at the input
+      gsap.set(flyEl, {
+        position: "fixed",
+        top: inputRect.top,
+        left: inputRect.left,
+        width: inputRect.width,
+        zIndex: 9999,
+        opacity: 1,
+        scale: 1,
+        rotation: 0,
+      });
+
+      const targetTop = listRect.top + (filteredGratitudes.length > 0 ? 0 : 0);
+
+      // Animate!
+      const tl = gsap.timeline({
+        onComplete: () => {
+          setPendingGratitude(null);
+          commitGratitude(text);
+        }
+      });
+
+      tl.to(flyEl, {
+        scale: 1.05,
+        boxShadow: "0 20px 60px -15px rgba(0,0,0,0.3)",
+        duration: 0.25,
+        ease: "power2.out",
+      })
+      .to(flyEl, {
+        top: targetTop,
+        scale: 0.95,
+        rotation: 0,
+        duration: 0.6,
+        ease: "power3.inOut",
+      })
+      .to(flyEl, {
+        scale: 1,
+        boxShadow: "0 4px 20px -5px rgba(0,0,0,0.1)",
+        opacity: 0,
+        duration: 0.3,
+        ease: "back.out(1.7)",
+      });
+    });
+  }, [commitGratitude, filteredGratitudes.length]);
+
   const handleDeleteGratitude = (id: string) => {
     setGratitudes(prev => prev.filter(g => g.id !== id));
     toast.success("Merkintä poistettu", {
@@ -213,12 +290,25 @@ const Index = () => {
         </div>
 
         {/* Input Section - Only show for today */}
-        {isToday && <div className="mb-10">
+        {isToday && <div className="mb-10" ref={inputRef}>
             <GratitudeInput onSubmit={handleAddGratitude} />
           </div>}
 
+        {/* Flying gratitude element */}
+        {pendingGratitude && (
+          <div
+            ref={flyingRef}
+            className="bg-gradient-card rounded-2xl p-6 shadow-card pointer-events-none"
+            style={{ opacity: 0 }}
+          >
+            <p className="text-lg font-body text-foreground leading-relaxed">
+              {pendingGratitude}
+            </p>
+          </div>
+        )}
+
         {/* Gratitudes List */}
-        <div className="space-y-4" role="list">
+        <div className="space-y-4" role="list" ref={listRef}>
           {filteredGratitudes.length === 0 ? <div className="text-center py-16 bg-card/50 rounded-2xl">
               <p className="text-muted-foreground font-body">
                 {isToday ? "Aloita tallentamalla mistä olet kiitollinen tänään" : `Ei kiitollisuuksia päivänä ${format(selectedDate, "d. MMMM yyyy", {
