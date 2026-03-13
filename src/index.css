@@ -211,11 +211,11 @@
   .bg-wavy-gradient {
     background: linear-gradient(
       -45deg,
-      #C2CDFF 0%,
-      #FFBB96 25%,
-      #C2CDFF 50%,
-      #FFBB96 75%,
-      #C2CDFF 100%
+      hsl(228 40% 82%) 0%,
+      hsl(270 35% 78%) 25%,
+      hsl(228 40% 82%) 50%,
+      hsl(270 35% 78%) 75%,
+      hsl(228 40% 82%) 100%
     );
     background-size: 400% 400%;
     animation: wave-gradient 12s ease-in-out infinite;
