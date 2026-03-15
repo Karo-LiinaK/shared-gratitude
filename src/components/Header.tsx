@@ -21,6 +21,7 @@ const Header = () => {
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
+            WebkitTextStroke: "1.5px hsl(235, 75%, 35%)",
           }}
         >
           Glimmer
