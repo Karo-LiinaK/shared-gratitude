@@ -20,10 +20,10 @@ interface FamilyCircleProps {
 }
 
 const colorVariants: Record<string, string> = {
-  amber: "bg-primary/20 text-primary",
-  peach: "bg-accent/20 text-accent-foreground",
-  coral: "bg-secondary/30 text-secondary-foreground",
-  cream: "bg-muted text-muted-foreground",
+  amber: "bg-[#A0C8B0] text-[#201D5E]",
+  peach: "bg-[#D6C4E8] text-[#201D5E]",
+  coral: "bg-[#D9CBA0] text-[#201D5E]",
+  cream: "bg-[#E2BDA4] text-[#201D5E]",
 };
 
 const FamilyCircle = ({ members, maxMembers = 6, onInvite }: FamilyCircleProps) => {

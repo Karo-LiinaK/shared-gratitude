@@ -39,8 +39,8 @@ const TwinklingStars = () => {
             width={star.size * 2.5}
             height={star.size * 2.5}
             viewBox="0 0 24 24"
-            fill="hsl(25, 90%, 60%)"
-            className="drop-shadow-[0_0_4px_rgba(230,130,60,0.6)]"
+            fill="#E2F7AA"
+            className="drop-shadow-[0_0_4px_rgba(226,247,170,0.8)]"
           >
             <path d="M12 0L14.59 8.41L23 12L14.59 15.59L12 24L9.41 15.59L1 12L9.41 8.41Z" />
           </svg>
