@@ -1,13 +1,13 @@
 import TwinklingStars from "./TwinklingStars";
 
 const letters = [
-  { char: "G", rotate: -6, scale: 1.05 },
-  { char: "l", rotate: 3, scale: 0.95 },
-  { char: "i", rotate: -2, scale: 1.0 },
-  { char: "m", rotate: 4, scale: 1.02 },
-  { char: "m", rotate: -3, scale: 0.98 },
-  { char: "e", rotate: 5, scale: 1.03 },
-  { char: "r", rotate: -4, scale: 1.0 },
+  { char: "G", rotate: -6, scale: 1.05, font: "'Bangers', cursive" },
+  { char: "l", rotate: 3, scale: 0.95, font: "'Rock Salt', cursive" },
+  { char: "i", rotate: -2, scale: 1.0, font: "'Special Elite', cursive" },
+  { char: "m", rotate: 4, scale: 1.02, font: "'Permanent Marker', cursive" },
+  { char: "m", rotate: -3, scale: 0.98, font: "'Caveat', cursive" },
+  { char: "e", rotate: 5, scale: 1.03, font: "'Indie Flower', cursive" },
+  { char: "r", rotate: -4, scale: 1.0, font: "'Reenie Beanie', cursive" },
 ];
 
 const Header = () => {
