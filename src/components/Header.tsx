@@ -17,7 +17,10 @@ const Header = () => {
           className="text-5xl md:text-6xl tracking-tight"
           style={{
             fontFamily: "'Neonderthaw', cursive",
-            color: "hsl(235, 75%, 35%)",
+            background: "linear-gradient(135deg, #C2CDFF 0%, #FFBB96 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
           }}
         >
           Glimmer
