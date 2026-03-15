@@ -1,41 +1,38 @@
+const letters = [
+  { char: "G", bg: "hsl(25 80% 52%)", color: "white", rotate: -4, font: "serif", scale: 1.1 },
+  { char: "l", bg: "hsl(252 50% 45%)", color: "hsl(56 100% 85%)", rotate: 3, font: "cursive", scale: 0.95 },
+  { char: "i", bg: "hsl(56 90% 65%)", color: "hsl(252 40% 20%)", rotate: -2, font: "sans-serif", scale: 0.9 },
+  { char: "m", bg: "hsl(252 37% 32%)", color: "white", rotate: 5, font: "serif", scale: 1 },
+  { char: "m", bg: "hsl(25 70% 60%)", color: "white", rotate: -3, font: "cursive", scale: 1.05 },
+  { char: "e", bg: "hsl(235 60% 72%)", color: "hsl(252 40% 20%)", rotate: 2, font: "sans-serif", scale: 0.95 },
+  { char: "r", bg: "hsl(25 80% 52%)", color: "white", rotate: -5, font: "serif", scale: 1.1 },
+];
+
 const TornPaperTitle = () => {
   return (
-    <div className="relative inline-block">
-      {/* Orange paper cutout title */}
-      <div
-        className="relative px-10 py-5 bg-primary torn-scrap"
-        style={{
-          filter: "drop-shadow(4px 6px 8px hsl(252 40% 20% / 0.35))",
-          transform: "rotate(-2deg)",
-        }}
-      >
-        <h1
-          className="text-5xl md:text-7xl font-display font-black tracking-[0.15em] text-primary-foreground uppercase select-none"
+    <div className="flex items-center gap-1 md:gap-2">
+      {letters.map((l, i) => (
+        <div
+          key={i}
+          className="torn-scrap relative px-2 py-1 md:px-4 md:py-2 select-none"
           style={{
-            textShadow: "2px 2px 0px hsl(25 70% 40% / 0.3)",
+            backgroundColor: l.bg,
+            transform: `rotate(${l.rotate}deg) scale(${l.scale})`,
+            filter: "drop-shadow(3px 4px 6px hsl(252 40% 20% / 0.4))",
           }}
         >
-          Glimmer
-        </h1>
-      </div>
-
-      {/* Small torn accent piece */}
-      <div
-        className="absolute -bottom-3 -right-4 w-12 h-8 bg-primary/80 torn-scrap"
-        style={{
-          transform: "rotate(12deg)",
-          filter: "drop-shadow(2px 3px 4px hsl(252 40% 20% / 0.25))",
-        }}
-        aria-hidden="true"
-      />
-      <div
-        className="absolute -top-2 -left-3 w-8 h-6 bg-primary/70 torn-scrap"
-        style={{
-          transform: "rotate(-8deg)",
-          filter: "drop-shadow(2px 3px 4px hsl(252 40% 20% / 0.2))",
-        }}
-        aria-hidden="true"
-      />
+          <span
+            className="text-4xl md:text-6xl font-black block leading-none"
+            style={{
+              color: l.color,
+              fontFamily: l.font,
+              textShadow: "1px 1px 2px hsl(0 0% 0% / 0.2)",
+            }}
+          >
+            {l.char}
+          </span>
+        </div>
+      ))}
     </div>
   );
 };
