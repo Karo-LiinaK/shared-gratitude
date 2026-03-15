@@ -70,6 +70,12 @@ export default {
           brown: "hsl(var(--glimmer-brown))",
           "warm-gray": "hsl(var(--glimmer-warm-gray))",
         },
+        // Direct papercut palette
+        "paper-lavender": "hsl(235 100% 85%)",
+        "paper-night": "hsl(252 37% 32%)",
+        "paper-yellow": "hsl(56 100% 73%)",
+        "paper-orange": "hsl(25 80% 52%)",
+        "paper-cream": "hsl(40 30% 93%)",
       },
       borderRadius: {
         lg: "var(--radius)",
