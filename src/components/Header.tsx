@@ -14,7 +14,7 @@ const Header = () => {
       {/* Title */}
       <div className="relative z-10 mb-6">
         <h1
-          className="text-5xl md:text-6xl tracking-tight"
+          className="text-7xl md:text-8xl tracking-tight"
           style={{
             fontFamily: "'Neonderthaw', cursive",
             background: "linear-gradient(135deg, #C2CDFF 0%, #FFBB96 100%)",
