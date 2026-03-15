@@ -1,344 +1,249 @@
-import { useState, useMemo, useEffect, useRef, useCallback } from "react";
-import { format } from "date-fns";
-import { fi } from "date-fns/locale";
+import { useState, useMemo, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import { z } from "zod";
-import gsap from "gsap";
-import Header from "@/components/Header";
-import GratitudeInput from "@/components/GratitudeInput";
-import GratitudeCard from "@/components/GratitudeCard";
-import FamilyCircle from "@/components/FamilyCircle";
-import DateNavigator from "@/components/DateNavigator";
-interface Gratitude {
+import TornPaperTitle from "@/components/TornPaperTitle";
+import PaperJar from "@/components/PaperJar";
+import Firefly from "@/components/Firefly";
+import PaperScrapInput from "@/components/PaperScrapInput";
+
+const STORAGE_KEY = "glimmer-gratitudes-v2";
+const MAX_GLIMMERS = 5;
+
+interface Glimmer {
   id: string;
   text: string;
-  author?: string;
-  timestamp: Date;
+  timestamp: number;
 }
 
-// Helper to generate sample historical data
-const generateSampleData = (): Gratitude[] => {
-  const now = new Date();
-  const samples = [
-  // Tänään
-  {
-    text: "Aamukahvi auringonnousun valossa ikkunan äärellä",
-    daysAgo: 0,
-    hoursAgo: 1
-  }, {
-    text: "Lämmin halaus tyttäreltäni ennen koulua",
-    daysAgo: 0,
-    hoursAgo: 2
-  },
-  // Eilen
-  {
-    text: "Sateen ääni katolla kirjaa lukiessa",
-    daysAgo: 1,
-    hoursAgo: 3
-  }, {
-    text: "Yllätyssoitto vanhalta ystävältä",
-    daysAgo: 1,
-    hoursAgo: 8
-  }, {
-    text: "Kotitekoinen keitto illalliseksi",
-    daysAgo: 1,
-    hoursAgo: 12
-  },
-  // 2 päivää sitten
-  {
-    text: "Löysin unohtuneen 20 euron setelin takintaskusta",
-    daysAgo: 2,
-    hoursAgo: 5
-  }, {
-    text: "Ensimmäiset kukat puhkesivat puutarhassa",
-    daysAgo: 2,
-    hoursAgo: 10
-  },
-  // 3 päivää sitten
-  {
-    text: "Tuottelias aamu töissä",
-    daysAgo: 3,
-    hoursAgo: 4
-  }, {
-    text: "Koirani innostus kun tulin kotiin",
-    daysAgo: 3,
-    hoursAgo: 9
-  },
-  // 5 päivää sitten
-  {
-    text: "Kaunis auringonlaskukävely",
-    daysAgo: 5,
-    hoursAgo: 6
-  },
-  // 7 päivää sitten
-  {
-    text: "Sain vihdoin luettua kirjan jota luin kuukausia",
-    daysAgo: 7,
-    hoursAgo: 2
-  }, {
-    text: "Hiljainen hetki itsekseni",
-    daysAgo: 7,
-    hoursAgo: 8
-  }];
-  return samples.map((sample, index) => {
-    const timestamp = new Date(now);
-    timestamp.setDate(timestamp.getDate() - sample.daysAgo);
-    timestamp.setHours(timestamp.getHours() - sample.hoursAgo);
-    return {
-      id: `sample-${index}`,
-      text: sample.text,
-      author: "You",
-      timestamp
-    };
-  });
-};
-
-const STORAGE_KEY = "glimmer-gratitudes";
-
-const GratitudeSchema = z.object({
-  id: z.string(),
-  text: z.string(),
-  author: z.string().optional(),
-  timestamp: z.string().or(z.number()),
-});
-
-const GratitudesArraySchema = z.array(GratitudeSchema);
-
-const loadGratitudes = (): Gratitude[] => {
+const loadGlimmers = (): Glimmer[] => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      const validated = GratitudesArraySchema.parse(parsed);
-      return validated.map((g): Gratitude => ({
-        id: g.id,
-        text: g.text,
-        author: g.author,
-        timestamp: new Date(g.timestamp),
-      }));
-    }
-  } catch (e) {
-    console.error("Failed to load gratitudes from localStorage", e);
+    if (stored) return JSON.parse(stored);
+  } catch {
     localStorage.removeItem(STORAGE_KEY);
   }
-  return generateSampleData();
+  return [];
 };
 
 const Index = () => {
-  const [gratitudes, setGratitudes] = useState<Gratitude[]>(loadGratitudes);
-  const [pendingGratitude, setPendingGratitude] = useState<string | null>(null);
+  const [glimmers, setGlimmers] = useState<Glimmer[]>(loadGlimmers);
+  const [inputOpen, setInputOpen] = useState(false);
 
-  // Persist gratitudes to localStorage
+  // Today's glimmers only
+  const todayKey = new Date().toISOString().slice(0, 10);
+  const todayGlimmers = useMemo(
+    () => glimmers.filter((g) => new Date(g.timestamp).toISOString().slice(0, 10) === todayKey),
+    [glimmers, todayKey]
+  );
+
+  const glimmerCount = todayGlimmers.length;
+  const nightProgress = Math.min(glimmerCount / MAX_GLIMMERS, 1);
+
+  // Persist
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(gratitudes));
-  }, [gratitudes]);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(glimmers));
+  }, [glimmers]);
 
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [familyMembers] = useState([{
-    id: "1",
-    name: "Sinä",
-    initials: "OMA",
-    color: "amber"
-  }, {
-    id: "2",
-    name: "Saara",
-    initials: "SA",
-    color: "peach"
-  }, {
-    id: "3",
-    name: "Tomi",
-    initials: "TO",
-    color: "coral"
-  }]);
-  const isToday = format(selectedDate, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd");
+  // Fireflies: show (MAX - collected) fireflies
+  const fireflyCount = Math.max(MAX_GLIMMERS - glimmerCount, 0);
+  const fireflyIds = useMemo(
+    () => Array.from({ length: fireflyCount }, (_, i) => i + glimmerCount),
+    [fireflyCount, glimmerCount]
+  );
 
-  // Refs for GSAP animation
-  const inputRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
-  const flyingRef = useRef<HTMLDivElement>(null);
-
-  // Filter gratitudes for selected date
-  const filteredGratitudes = useMemo(() => {
-    const selectedDateStr = format(selectedDate, "yyyy-MM-dd");
-    return gratitudes.filter(g => format(g.timestamp, "yyyy-MM-dd") === selectedDateStr).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
-  }, [gratitudes, selectedDate]);
-
-  // Check if a date has gratitudes (for calendar highlighting)
-  const hasGratitudesOnDate = (date: Date): boolean => {
-    const dateStr = format(date, "yyyy-MM-dd");
-    return gratitudes.some(g => format(g.timestamp, "yyyy-MM-dd") === dateStr);
-  };
-
-  const commitGratitude = useCallback((text: string) => {
-    const newGratitude: Gratitude = {
-      id: Date.now().toString(),
-      text,
-      author: "Sinä",
-      timestamp: new Date()
-    };
-    setGratitudes(prev => [newGratitude, ...prev]);
-    toast.success("Kiitollisuus lisätty ✨", {
-      description: "Hetkesi on tallennettu"
-    });
+  const handleFireflyClick = useCallback((_id: number) => {
+    setInputOpen(true);
   }, []);
 
-  const handleAddGratitude = useCallback((text: string) => {
-    if (!inputRef.current || !listRef.current) {
-      commitGratitude(text);
-      return;
-    }
-
-    // Create flying element
-    setPendingGratitude(text);
-
-    // Wait for the flying element to render
-    requestAnimationFrame(() => {
-      const flyEl = flyingRef.current;
-      const inputEl = inputRef.current;
-      const listEl = listRef.current;
-      if (!flyEl || !inputEl || !listEl) {
-        commitGratitude(text);
-        setPendingGratitude(null);
+  const handleAddGlimmer = useCallback(
+    (text: string) => {
+      if (glimmerCount >= MAX_GLIMMERS) {
+        toast.info("Päivän purkki on täynnä! 🌟", {
+          description: "Olet kerännyt kaikki 5 kiitollisuutta tänään.",
+        });
+        setInputOpen(false);
         return;
       }
 
-      const inputRect = inputEl.getBoundingClientRect();
-      const listRect = listEl.getBoundingClientRect();
+      const newGlimmer: Glimmer = {
+        id: Date.now().toString(),
+        text,
+        timestamp: Date.now(),
+      };
 
-      // Position the flying element at the input
-      gsap.set(flyEl, {
-        position: "fixed",
-        top: inputRect.top,
-        left: inputRect.left,
-        width: inputRect.width,
-        zIndex: 9999,
-        opacity: 1,
-        scale: 1,
-        rotation: 0,
+      setGlimmers((prev) => [...prev, newGlimmer]);
+      setInputOpen(false);
+      toast.success("Kiitollisuus kerätty! ✨", {
+        description: text.slice(0, 60),
       });
+    },
+    [glimmerCount]
+  );
 
-      const targetTop = listRect.top + (filteredGratitudes.length > 0 ? 0 : 0);
+  // Interpolate background color: lavender → deep purple
+  const bgLavender = { h: 235, s: 100, l: 85 };
+  const bgNight = { h: 252, s: 37, l: 32 };
+  const bgH = bgLavender.h + (bgNight.h - bgLavender.h) * nightProgress;
+  const bgS = bgLavender.s + (bgNight.s - bgLavender.s) * nightProgress;
+  const bgL = bgLavender.l + (bgNight.l - bgLavender.l) * nightProgress;
+  const bgColor = `hsl(${bgH} ${bgS}% ${bgL}%)`;
 
-      // Animate!
-      const tl = gsap.timeline({
-        onComplete: () => {
-          setPendingGratitude(null);
-          commitGratitude(text);
-        }
-      });
+  return (
+    <div
+      className="min-h-screen relative overflow-hidden transition-colors duration-1000"
+      style={{ backgroundColor: bgColor }}
+    >
+      {/* Torn paper background layers for depth */}
+      <div
+        className="absolute top-0 left-0 right-0 h-48 torn-edge-bottom"
+        style={{
+          background: `hsl(${bgH} ${Math.min(bgS + 10, 100)}% ${Math.min(bgL + 5, 95)}%)`,
+          filter: "drop-shadow(0 4px 12px hsl(252 40% 20% / 0.15))",
+        }}
+        aria-hidden="true"
+      />
 
-      tl.to(flyEl, {
-        scale: 1.05,
-        boxShadow: "0 20px 60px -15px rgba(0,0,0,0.3)",
-        duration: 0.25,
-        ease: "power2.out",
-      })
-      .to(flyEl, {
-        top: targetTop,
-        scale: 0.95,
-        rotation: 0,
-        duration: 0.6,
-        ease: "power3.inOut",
-      })
-      .to(flyEl, {
-        scale: 1,
-        boxShadow: "0 4px 20px -5px rgba(0,0,0,0.1)",
-        opacity: 0,
-        duration: 0.3,
-        ease: "back.out(1.7)",
-      });
-    });
-  }, [commitGratitude, filteredGratitudes.length]);
+      <div
+        className="absolute bottom-0 left-0 right-0 h-40 torn-edge-top"
+        style={{
+          background: `hsl(${bgH} ${Math.max(bgS - 15, 0)}% ${Math.max(bgL - 8, 10)}%)`,
+          filter: "drop-shadow(0 -4px 12px hsl(252 40% 20% / 0.15))",
+        }}
+        aria-hidden="true"
+      />
 
-  const handleDeleteGratitude = (id: string) => {
-    setGratitudes(prev => prev.filter(g => g.id !== id));
-    toast.success("Merkintä poistettu", {
-      description: "Kiitollisuusmerkintä on poistettu"
-    });
-  };
+      {/* Side torn strips */}
+      <div
+        className="absolute top-20 -left-4 w-24 h-[60%] bg-accent/10 torn-scrap"
+        style={{
+          transform: "rotate(-5deg)",
+          filter: "drop-shadow(3px 3px 8px hsl(252 40% 20% / 0.1))",
+        }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute top-32 -right-6 w-20 h-[40%] bg-primary/10 torn-scrap"
+        style={{
+          transform: "rotate(3deg)",
+          filter: "drop-shadow(-3px 3px 8px hsl(252 40% 20% / 0.1))",
+        }}
+        aria-hidden="true"
+      />
 
-  const handleInvite = () => {
-    toast.info("Kutsutoiminto tulossa pian!", {
-      description: "Jaa kiitollisuustilasi perheen kanssa"
-    });
-  };
+      {/* Content */}
+      <main className="relative z-10 flex flex-col items-center min-h-screen px-4 py-8">
+        {/* Title */}
+        <motion.div
+          initial={{ y: -40, opacity: 0, rotate: -5 }}
+          animate={{ y: 0, opacity: 1, rotate: 0 }}
+          transition={{ type: "spring", damping: 15 }}
+          className="mb-4"
+        >
+          <TornPaperTitle />
+        </motion.div>
 
-  // Calculate total stats
-  const totalGratitudes = gratitudes.length;
-  const daysWithGratitudes = new Set(gratitudes.map(g => format(g.timestamp, "yyyy-MM-dd"))).size;
-  return <div className="min-h-screen bg-background">
-      {/* Decorative background elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-glimmer-peach/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-glimmer-coral/10 rounded-full blur-3xl animate-float" style={{
-        animationDelay: "2s"
-      }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-glimmer-peach/5 rounded-full blur-3xl" />
-      </div>
+        {/* Subtitle on torn paper */}
+        <motion.div
+          className="mb-8 px-6 py-2 bg-card/80 torn-edge-all relative"
+          style={{
+            filter: "drop-shadow(2px 3px 6px hsl(252 40% 20% / 0.15))",
+            transform: "rotate(1deg)",
+          }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <p className="text-sm font-body text-muted-foreground italic">
+            Kerää päivän 5 kiitollisuutta — klikkaa tulikärpästä
+          </p>
+        </motion.div>
 
-      <main className="relative z-10 container max-w-2xl mx-auto px-4 pb-20">
-        <Header />
+        {/* Jar */}
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.5, type: "spring" }}
+          className="mb-8"
+        >
+          <PaperJar
+            glimmerCount={glimmerCount}
+            collectedGlimmers={todayGlimmers.map((g) => g.text)}
+          />
+        </motion.div>
 
-        {/* Family Circle */}
-        <div className="mb-8">
-          <FamilyCircle members={familyMembers} onInvite={handleInvite} />
-        </div>
-
-        {/* Date Navigator */}
-        <div className="mb-8">
-          <DateNavigator selectedDate={selectedDate} onDateChange={setSelectedDate} hasGratitudes={hasGratitudesOnDate} />
-        </div>
-
-        {/* Input Section - Only show for today */}
-        {isToday && <div className="mb-10" ref={inputRef}>
-            <GratitudeInput onSubmit={handleAddGratitude} />
-          </div>}
-
-        {/* Flying gratitude element */}
-        {pendingGratitude && (
-          <div
-            ref={flyingRef}
-            className="bg-gradient-card rounded-2xl p-6 shadow-card pointer-events-none"
-            style={{ opacity: 0 }}
+        {/* Collected glimmers list */}
+        {todayGlimmers.length > 0 && (
+          <motion.div
+            className="w-full max-w-md space-y-3 mb-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
           >
-            <p className="text-lg font-body text-foreground leading-relaxed">
-              {pendingGratitude}
-            </p>
-          </div>
+            <AnimatePresence>
+              {todayGlimmers.map((g, i) => (
+                <motion.div
+                  key={g.id}
+                  className="bg-card/90 px-5 py-3 torn-scrap paper-curl relative"
+                  style={{
+                    filter: "drop-shadow(3px 4px 8px hsl(252 40% 20% / 0.15))",
+                    transform: `rotate(${(i % 2 === 0 ? -1 : 1) * (1 + Math.random())}deg)`,
+                  }}
+                  initial={{ opacity: 0, x: -30, rotate: -10 }}
+                  animate={{ opacity: 1, x: 0, rotate: (i % 2 === 0 ? -1 : 1) }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ type: "spring", damping: 20 }}
+                >
+                  <p className="text-primary font-display font-bold text-base leading-relaxed">
+                    {g.text}
+                  </p>
+                  <span className="text-xs text-muted-foreground font-body mt-1 block">
+                    {new Date(g.timestamp).toLocaleTimeString("fi-FI", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         )}
 
-        {/* Gratitudes List */}
-        <div className="space-y-4" role="list" ref={listRef}>
-          {filteredGratitudes.length === 0 ? <div className="text-center py-16 bg-card/50 rounded-2xl">
-              <p className="text-muted-foreground font-body">
-                {isToday ? "Aloita tallentamalla mistä olet kiitollinen tänään" : `Ei kiitollisuuksia päivänä ${format(selectedDate, "d. MMMM yyyy", {
-              locale: fi
-            })}`}
-              </p>
-            </div> : <>
-              <h2 className="text-lg font-semibold text-foreground mb-4 font-serif">
-                {isToday ? "Tämän päivän valohippuset" : format(selectedDate, "d. MMMM yyyy", {
-              locale: fi
-            })}
-              </h2>
-              {filteredGratitudes.map((gratitude, index) => <GratitudeCard key={gratitude.id} text={gratitude.text} author={gratitude.author} timestamp={gratitude.timestamp} index={index} onDelete={() => handleDeleteGratitude(gratitude.id)} />)}
-            </>}
-        </div>
-
-        {/* Stats */}
-        <div className="mt-12 text-center space-y-1">
-          <p className="text-sm text-muted-foreground font-body">
-            <span className="text-primary font-semibold">{filteredGratitudes.length}</span> 
-            {" "}valohippus{filteredGratitudes.length !== 1 ? "ta" : ""} 
-            {isToday ? " tänään" : ` päivänä ${format(selectedDate, "d.M.", {
-            locale: fi
-          })}`}
-          </p>
-          <p className="text-xs text-muted-foreground/70 font-body">
-            Yhteensä {totalGratitudes} hetkeä {daysWithGratitudes} päivän ajalta
-          </p>
-        </div>
+        {/* Goal reached message */}
+        {glimmerCount >= MAX_GLIMMERS && (
+          <motion.div
+            className="text-center px-8 py-4 bg-accent/20 torn-scrap"
+            style={{
+              filter: "drop-shadow(3px 4px 10px hsl(56 100% 73% / 0.3))",
+            }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: "spring" }}
+          >
+            <p className="text-xl font-display font-bold text-accent-foreground">
+              🌟 Purkki on täynnä! 🌟
+            </p>
+            <p className="text-sm font-body text-muted-foreground mt-1">
+              Olet kerännyt kaikki 5 päivän kiitollisuutta.
+            </p>
+          </motion.div>
+        )}
       </main>
-    </div>;
+
+      {/* Fireflies floating around */}
+      <AnimatePresence>
+        {fireflyIds.map((id) => (
+          <Firefly key={id} id={id} onClick={handleFireflyClick} />
+        ))}
+      </AnimatePresence>
+
+      {/* Paper scrap input modal */}
+      <PaperScrapInput
+        isOpen={inputOpen}
+        onClose={() => setInputOpen(false)}
+        onSubmit={handleAddGlimmer}
+      />
+    </div>
+  );
 };
+
 export default Index;
