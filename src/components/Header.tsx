@@ -29,7 +29,7 @@ const Header = () => {
               key={i}
               className="inline-block"
               style={{
-                fontFamily: "'Finger Paint', cursive",
+                fontFamily: l.font,
                 color: "hsl(235, 75%, 35%)",
                 transform: `rotate(${l.rotate}deg) scale(${l.scale})`,
                 display: "inline-block",
