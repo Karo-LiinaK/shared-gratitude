@@ -36,8 +36,8 @@ const TwinklingStars = () => {
         >
           {/* Star shape using CSS */}
           <svg
-            width={star.size * 2.5}
-            height={star.size * 2.5}
+            width={star.size * 3.5}
+            height={star.size * 3.5}
             viewBox="0 0 24 24"
             fill="#E2F7AA"
             className="drop-shadow-[0_0_4px_rgba(226,247,170,0.8)]"
