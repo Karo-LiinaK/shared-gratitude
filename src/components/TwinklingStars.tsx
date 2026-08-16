@@ -9,9 +9,15 @@ interface Star {
   duration: number;
 }
 
+interface PlacedStar {
+  top: number;
+  left: number;
+  size: number;
+}
+
 const TwinklingStars = () => {
   const stars = useMemo<Star[]>(() => {
-    const placedStars: Star[] = [];
+    const placedStars: PlacedStar[] = [];
     const minDistance = 14; // percentage points between star centers
 
     for (let i = 0; i < 18; i++) {
@@ -36,17 +42,17 @@ const TwinklingStars = () => {
         attempts++;
       }
 
-      placedStars.push({
-        id: i,
-        top: `${top}%`,
-        left: `${left}%`,
-        size,
-        delay: Math.random() * 5,
-        duration: Math.random() * 3 + 2,
-      });
+      placedStars.push({ top, left, size });
     }
 
-    return placedStars;
+    return placedStars.map((star, i) => ({
+      id: i,
+      top: `${star.top}%`,
+      left: `${star.left}%`,
+      size: star.size,
+      delay: Math.random() * 5,
+      duration: Math.random() * 3 + 2,
+    }));
   }, []);
 
   return (
